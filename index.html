@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form dengan Countdown</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        #countdown {
+            font-size: 30px;
+            color: red;
+        }
+        iframe {
+            width: 100%;
+            height: 700px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Selamat datang di Formulir Kami</h1>
+    <p>Waktu tersisa untuk mengerjakan formulir ini:</p>
+    <div id="countdown"></div>
+
+    <h2>Isi Formulir Berikut:</h2>
+    <!-- URL Google Form, pastikan ini benar -->
+    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfUtzTVOUY1LL7DJ_mOcy_4L0HT52GaxAT3CmAZC-37CX8WFw/viewform?embedded=true"></iframe>
+
+    <script>
+        // Waktu target countdown (13 menit dari sekarang)
+        var deadline = new Date().getTime() + 13 * 60 * 1000;
+
+        // Update countdown setiap 1 detik
+        var x = setInterval(function() {
+
+            var now = new Date().getTime();
+            var distance = deadline - now;
+
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("countdown").innerHTML = minutes + "m " + seconds + "s ";
+
+            // Jika waktu habis, beri notifikasi
+            if (distance < 0) {
+                clearInterval(x);
+                document.getElementById("countdown").innerHTML = "Waktu habis!";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
