@@ -1,86 +1,33 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form dengan Countdown</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            overflow: hidden;
-        }
-        #countdown {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 20px;
-            color: red;
-            background-color: rgba(255, 255, 255, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1000; /* Menjaga countdown di atas form */
-        }
-        .form-container {
-            height: 100vh; /* Membuat form mengisi satu layar penuh */
-            overflow: auto; /* Membuat form dapat discroll */
-            padding-top: 50px; /* Memberi ruang untuk countdown */
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
-</head>
-<body>
-    <div id="countdown">Countdown Gass: 13m 00s</div>
+function autoSubmit() {
+  try {
+    // Ganti ID Form dengan ID Form yang benar
+    var form = FormApp.openById('1qwh0LbrZJRpReKh5AINYu2xkJUvlSl58AO6CxBxyn5s');
+    
+    // Mengambil semua responses dari form
+    var formResponses = form.getResponses();
+    var lastResponse = formResponses[formResponses.length - 1];
+    var timestamp = lastResponse.getTimestamp(); // Mendapatkan timestamp response terakhir
+    
+    var currentTime = new Date();
+    var timeDiff = (currentTime - timestamp) / 1000 / 60; // Menghitung selisih waktu dalam menit
+    
+    if (timeDiff >= 1) {  // Jika sudah lebih dari 1 menit
+      // Mengupdate spreadsheet atau aksi lain (misalnya menandai bahwa form sudah disubmit)
+      var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Form Responses");
+      var lastRow = sheet.getLastRow();
+      sheet.getRange(lastRow, sheet.getLastColumn()).setValue('Submitted after 1 min');
+      
+      // Jika ingin memproses pengiriman form atau lainnya, bisa ditambahkan di sini
+    }
+  } catch (e) {
+    Logger.log("Error: " + e.message);  // Log error jika terjadi masalah
+  }
+}
 
-    <div class="form-container">
-        <!-- URL Google Form -->
-        <iframe id="form-frame" src="https://docs.google.com/forms/d/e/1FAIpQLSfUtzTVOUY1LL7DJ_mOcy_4L0HT52GaxAT3CmAZC-37CX8WFw/viewform?embedded=true"></iframe>
-    </div>
-
-    <script>
-        // Waktu target countdown (13 menit dari sekarang)
-        var deadline = new Date().getTime() + 13 * 60 * 1000;
-
-        // Update countdown setiap 1 detik
-        var x = setInterval(function() {
-
-            var now = new Date().getTime();
-            var distance = deadline - now;
-
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById("countdown").innerHTML = "Countdown Gass: " + minutes + "m " + seconds + "s ";
-
-            // Jika waktu habis, beri notifikasi dan submit form
-            if (distance <= 1000) {
-                clearInterval(x);
-                document.getElementById("countdown").innerHTML = "Waktu habis!";
-                
-                // Menunggu 1 detik sebelum submit
-                setTimeout(submitForm, 1000); // Menunggu 1 detik untuk submit
-            }
-
-        }, 1000);
-
-        function submitForm() {
-            var iframe = document.getElementById("form-frame");
-            var form = iframe.contentWindow.document.querySelector("form");
-            if (form) {
-                // Menemukan tombol kirim dengan lebih tepat
-                var submitButton = iframe.contentWindow.document.querySelector('div[role="button"][aria-label="Kirim"]');
-                if (submitButton) {
-                    submitButton.click(); // Menekan tombol kirim
-                }
-            }
-        }
-    </script>
-</body>
-</html>
+function createTrigger() {
+  // Membuat trigger untuk menjalankan fungsi autoSubmit setiap 1 menit
+  ScriptApp.newTrigger('autoSubmit') 
+    .timeBased()
+    .everyMinutes(1)  // Setiap 1 menit
+    .create();  // Membuat trigger
+}
