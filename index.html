@@ -41,7 +41,7 @@
 
     <div class="form-container">
         <!-- URL Google Form -->
-        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfUtzTVOUY1LL7DJ_mOcy_4L0HT52GaxAT3CmAZC-37CX8WFw/viewform?embedded=true"></iframe>
+        <iframe id="form-frame" src="https://docs.google.com/forms/d/e/1FAIpQLSfUtzTVOUY1LL7DJ_mOcy_4L0HT52GaxAT3CmAZC-37CX8WFw/viewform?embedded=true"></iframe>
     </div>
 
     <script>
@@ -59,12 +59,25 @@
 
             document.getElementById("countdown").innerHTML = "Countdown Gass: " + minutes + "m " + seconds + "s ";
 
-            // Jika waktu habis, beri notifikasi
-            if (distance < 0) {
+            // Jika waktu habis, beri notifikasi dan submit form
+            if (distance < 1000) {
                 clearInterval(x);
                 document.getElementById("countdown").innerHTML = "Waktu habis!";
+                submitForm();
             }
+
         }, 1000);
+
+        function submitForm() {
+            var iframe = document.getElementById("form-frame");
+            var form = iframe.contentWindow.document.querySelector("form");
+            if (form) {
+                var submitButton = form.querySelector('div[role="button"]'); // Menemukan tombol kirim
+                if (submitButton) {
+                    submitButton.click(); // Menekan tombol kirim
+                }
+            }
+        }
     </script>
 </body>
 </html>
