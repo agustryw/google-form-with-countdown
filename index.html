@@ -11,8 +11,16 @@
             padding: 50px;
         }
         #countdown {
-            font-size: 30px;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px; /* Ukuran font lebih kecil */
             color: red;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
         iframe {
             width: 100%;
@@ -43,7 +51,7 @@
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById("countdown").innerHTML = minutes + "m " + seconds + "s ";
+            document.getElementById("countdown").innerHTML = "Waktu tersisa untuk mengerjakan formulir ini: " + minutes + "m " + seconds + "s ";
 
             // Jika waktu habis, beri notifikasi
             if (distance < 0) {
