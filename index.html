@@ -59,7 +59,7 @@
 
             document.getElementById("countdown").innerHTML = "Countdown Gass: " + minutes + "m " + seconds + "s ";
 
-            // Jika waktu habis, beri notifikasi dan submit form setelah 1 detik
+            // Jika waktu habis, beri notifikasi dan submit form
             if (distance <= 1000) {
                 clearInterval(x);
                 document.getElementById("countdown").innerHTML = "Waktu habis!";
@@ -74,7 +74,8 @@
             var iframe = document.getElementById("form-frame");
             var form = iframe.contentWindow.document.querySelector("form");
             if (form) {
-                var submitButton = form.querySelector('div[role="button"]'); // Menemukan tombol kirim
+                // Menemukan tombol kirim dengan lebih tepat
+                var submitButton = iframe.contentWindow.document.querySelector('div[role="button"][aria-label="Kirim"]');
                 if (submitButton) {
                     submitButton.click(); // Menekan tombol kirim
                 }
