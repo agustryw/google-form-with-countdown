@@ -60,7 +60,7 @@
             document.getElementById("countdown").innerHTML = "Countdown Gass: " + minutes + "m " + seconds + "s ";
 
             // Jika waktu habis, beri notifikasi dan submit form
-            if (distance < 1000) {
+            if (distance <= 1000) {
                 clearInterval(x);
                 document.getElementById("countdown").innerHTML = "Waktu habis!";
                 submitForm();
