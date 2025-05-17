@@ -59,11 +59,13 @@
 
             document.getElementById("countdown").innerHTML = "Countdown Gass: " + minutes + "m " + seconds + "s ";
 
-            // Jika waktu habis, beri notifikasi dan submit form
+            // Jika waktu habis, beri notifikasi dan submit form setelah 1 detik
             if (distance <= 1000) {
                 clearInterval(x);
                 document.getElementById("countdown").innerHTML = "Waktu habis!";
-                submitForm();
+                
+                // Menunggu 1 detik sebelum submit
+                setTimeout(submitForm, 1000); // Menunggu 1 detik untuk submit
             }
 
         }, 1000);
